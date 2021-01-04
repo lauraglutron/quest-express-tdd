@@ -27,6 +27,7 @@ describe("Test routes", () => {
         done();
       });
   });
+
   it("POST /bookmarks - success (fields provided) ", (done) => {
     request(app)
       .post("/bookmarks")
@@ -43,5 +44,42 @@ describe("Test routes", () => {
         done();
       })
       .catch(done);
+  });
+});
+
+describe("GET /bookmarks/:id", () => {
+  const testBookmark = { url: "https://nodejs.org/", title: "Node.js" };
+  beforeEach((done) =>
+    connection.query("TRUNCATE bookmark", () =>
+      connection.query("INSERT INTO bookmark SET ?", testBookmark, done)
+    )
+  );
+
+  // Write your tests HERE!
+  it("GET /bookmarks/:id - error (bookmark not found) ", (done) => {
+    request(app)
+      .get("/bookmarks/:id")
+      .expect(404)
+      .expect("Content-Type", /json/)
+      .then((response) => {
+        const expected = { error: "Bookmark not found" };
+        expect(response.body).toEqual(expected);
+        done();
+      });
+  });
+  it("GET /bookmarks/:id - success (bookmark found) ", (done) => {
+    request(app)
+      .get("/bookmarks/:id")
+      .expect(200)
+      .expect("Content-Type", /json/)
+      .then((response) => {
+        const expected = {
+          id: 1,
+          url: "https://nodejs.org/",
+          title: "Node.js",
+        };
+        expect(response.body).toEqual(expected);
+        done();
+      });
   });
 });

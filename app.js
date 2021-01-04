@@ -12,6 +12,8 @@ app.get("/", (req, res) => {
   res.status(200).json({ message: "Hello World!" });
 });
 
+app.get("/bookmarks/:id", (req, res) => {});
+
 app.post("/bookmarks", (req, res) => {
   const { url, title } = req.body;
   if (!url || !title) {
