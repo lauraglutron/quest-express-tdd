@@ -1,6 +1,7 @@
 // test/app.integration.spec.js
 const request = require("supertest");
 const app = require("../app");
+const connection = require("../connection");
 
 describe("Test routes", () => {
   it('GET / sends "Hello World" as json', (done) => {
@@ -69,7 +70,7 @@ describe("GET /bookmarks/:id", () => {
   });
   it("GET /bookmarks/:id - success (bookmark found) ", (done) => {
     request(app)
-      .get("/bookmarks/:id")
+      .get("/bookmarks/1")
       .expect(200)
       .expect("Content-Type", /json/)
       .then((response) => {

@@ -12,8 +12,6 @@ app.get("/", (req, res) => {
   res.status(200).json({ message: "Hello World!" });
 });
 
-app.get("/bookmarks/:id", (req, res) => {});
-
 app.post("/bookmarks", (req, res) => {
   const { url, title } = req.body;
   if (!url || !title) {
@@ -32,6 +30,22 @@ app.post("/bookmarks", (req, res) => {
       }
     );
   });
+});
+
+app.get("/bookmarks/:id", (req, res) => {
+  connection.query(
+    "SELECT * FROM bookmark WHERE id = ?",
+    [req.params.id],
+    (err, res) => {
+      if (err) {
+        return res.status(500);
+      }
+      if (res.length === 0) {
+        return res.status(404).json({ message: "Error: Bookmark not found" });
+      }
+      return res.status(200).json({});
+    }
+  );
 });
 
 module.exports = app;
