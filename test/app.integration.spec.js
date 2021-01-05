@@ -48,7 +48,7 @@ describe("Test routes", () => {
   });
 });
 
-describe("GET /bookmarks/:id", () => {
+describe("GET /bookmark/:id", () => {
   const testBookmark = { url: "https://nodejs.org/", title: "Node.js" };
   beforeEach((done) =>
     connection.query("TRUNCATE bookmark", () =>
@@ -56,29 +56,24 @@ describe("GET /bookmarks/:id", () => {
     )
   );
 
-  // Write your tests HERE!
-  it("GET /bookmarks/:id - error (bookmark not found) ", (done) => {
+  it("GET /bookmark/:id - error(id not found)", (done) => {
     request(app)
-      .get("/bookmarks/:id")
+      .get("/bookmark/:id")
       .expect(404)
-      .expect("Content-Type", /json/)
       .then((response) => {
         const expected = { error: "Bookmark not found" };
         expect(response.body).toEqual(expected);
         done();
       });
   });
-  it("GET /bookmarks/:id - success (bookmark found) ", (done) => {
+
+  it("GET /bookmark/:id - success(id found)", (done) => {
     request(app)
-      .get("/bookmarks/1")
+      .get("/bookmark/1")
       .expect(200)
       .expect("Content-Type", /json/)
       .then((response) => {
-        const expected = {
-          id: 1,
-          url: "https://nodejs.org/",
-          title: "Node.js",
-        };
+        const expected = { ...testBookmark, id: 1 };
         expect(response.body).toEqual(expected);
         done();
       });
